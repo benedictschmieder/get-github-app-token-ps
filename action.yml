@@ -22,5 +22,7 @@ runs:
       run: |
         Import-Module $env:GITHUB_ACTION_PATH/Get-GitHubAppToken
         $accessToken = Get-GitHubAppToken -AppId "${{ inputs.app-id }}" -PrivateKey "${{ inputs.private-key }}"
-        Write-Output "token=$($accessToken)" >> $Env:GITHUB_OUTPUT
+        Write-Host "AccessToken 2: $accessToken"
+        Write-Output "token=$($accessToken)"
+        Write-Output "token=$($accessToken)" >> $GITHUB_ENV
         
