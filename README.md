@@ -16,7 +16,7 @@ In order to use this action, you need to:
 ### Trigger workflow in another repository
 
 > [!NOTE]
-> The GitHub App needs the permission "Actions: Read and Write" in order for this to work
+> The GitHub App needs the permission "Actions: Read and Write" in order for the below example to work
 
 ```yaml
 name: Trigger workflow in another repository
