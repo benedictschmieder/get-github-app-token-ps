@@ -14,10 +14,12 @@ inputs:
 outputs:
   token:
     description: "GitHub installation access token"
+    value: ${{ steps.get-token.outputs.token }}
 runs:
   using: "composite"
   steps:
     - name: Get-AppToken
+      id: get-token
       shell: pwsh
       run: |
         Import-Module $env:GITHUB_ACTION_PATH/Get-GitHubAppToken
