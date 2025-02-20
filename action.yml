@@ -26,4 +26,4 @@ runs:
         $accessToken = Get-GitHubAppToken -AppId "${{ inputs.app-id }}" -PrivateKey "${{ inputs.private-key }}"
         Write-Output "token=$($accessToken)" >> "$GITHUB_OUTPUT"
     - name: Debug
-      run: echo "Token: ${{ steps.get-token.outputs.token }}"
+      run: echo "Token:"
