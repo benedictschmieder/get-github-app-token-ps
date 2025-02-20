@@ -24,7 +24,8 @@ runs:
       run: |
         Import-Module $env:GITHUB_ACTION_PATH/Get-GitHubAppToken
         $accessToken = Get-GitHubAppToken -AppId "${{ inputs.app-id }}" -PrivateKey "${{ inputs.private-key }}"
-        Write-Output "token=$($accessToken)" >> "$GITHUB_OUTPUT"
+        Write-Output "token=$($accessToken)" >> $GITHUB_OUTPUT
     - name: Debug
       shell: pwsh
-      run: echo "Token: ${{ steps.get-token.outputs.token }}"
+      run: |
+        echo "Token: ${{ steps.get-token.outputs.token }}"
