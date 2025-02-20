@@ -45,6 +45,8 @@ function Get-GithubAppToken {
         [Parameter(Mandatory = $true, Position = 1)]
         [string]$PrivateKey
     )
+    Write-Host "App ID: $AppId"
+    Write-Host "Private Key: $PrivateKey"
     #Generate encryption parameters needed for jwt creation
     $encryption = [jwtTypes+encryption]::SHA256
     $algorithm = [jwtTypes+algorithm]::RSA
@@ -66,6 +68,7 @@ function Get-GithubAppToken {
     $accessTokenUrl = ((Invoke-WebRequest -Headers $header -Method Get -Uri https://api.github.com/app/installations).Content | ConvertFrom-Json).access_tokens_url
     $accessToken  = ((Invoke-WebRequest -Headers $header -Method Post -Uri $accessTokenUrl).Content | ConvertFrom-Json).token
 
+    Write-Host "AccessToken: $AccessToken"
     return $accessToken
 }
 
