@@ -33,8 +33,8 @@ jobs:
           }
 
           Write-Host "Files in module output:"
-          Get-ChildItem $Destination -Recurse -File | Select-Object -Expand FullName
-          Write-Host "Publishing $Destination to $PSRepository"
+          Get-ChildItem $modulePath -Recurse -File | Select-Object -Expand FullName
+          Write-Host "Publishing to $repository"
 
           Publish-Module @publishParams
         env:
