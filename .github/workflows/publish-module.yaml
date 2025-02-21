@@ -1,0 +1,41 @@
+name: Build and Publish Module
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch 
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Update PowerShellGet
+        shell: pwsh
+        run: Install-Module PowerShellGet -Force
+
+      - name: Build and Publish Module
+        shell: pwsh
+        run: |
+          $modulePath = ".\Get-GitHubAppToken"
+          $repository = "PSGallery"
+          $publishParams = @{
+            Path        = $modulePath
+            NuGetApiKey = $env:apiKey
+            Verbose     = $true
+            Force       = $true
+            Repository  = $repository
+            ErrorAction = 'Stop'
+          }
+
+          Write-Host "Files in module output:"
+          Get-ChildItem $Destination -Recurse -File | Select-Object -Expand FullName
+          Write-Host "Publishing $Destination to $PSRepository"
+
+          Publish-Module @publishParams
+        env:
+          apiKey: ${{ secrets.PSGALLERY_API_KEY }}
