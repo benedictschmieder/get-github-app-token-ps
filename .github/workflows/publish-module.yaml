@@ -25,7 +25,7 @@ jobs:
           $repository = "PSGallery"
 
           #Installing required modules in order for Test-ModuleManifest to complete
-          $requiredModules = (Import-PowerShellDataFile "$modulepath/Get-GitHubAppToken.psd1).RequiredModules
+          $requiredModules = (Import-PowerShellDataFile "$modulepath/Get-GitHubAppToken.psd1").RequiredModules
           foreach ($module in $requiredModules) {
             Write-Host "Installing $module"
             Install-Module $module -AllowClobber -Force -ErrorAction Stop
