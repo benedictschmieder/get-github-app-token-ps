@@ -9,29 +9,26 @@ on:
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
+    env:
+      modulePath: "./Get-GitHubAppToken"
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Update PowerShellGet
+      - name: Install and Update necessary modules
         shell: pwsh
-        run: Install-Module PowerShellGet -Force
+        run: |
+          $requiredModules = (Import-PowerShellDataFile "$env:modulepath/Get-GitHubAppToken.psd1").RequiredModules + "PowerShellGet"
+          foreach ($module in $requiredModules) {
+            Write-Host "Installing module $module"
+            Install-Module $module -AllowClobber -Force -ErrorAction Stop
+          }
 
       - name: Build and Publish Module
         shell: pwsh
         run: |
-          $modulePath = "./Get-GitHubAppToken"
           $repository = "PSGallery"
-
-          #Installing required modules in order for Test-ModuleManifest to complete
-          $requiredModules = (Import-PowerShellDataFile "$modulepath/Get-GitHubAppToken.psd1").RequiredModules
-          foreach ($module in $requiredModules) {
-            Write-Host "Installing $module"
-            Install-Module $module -AllowClobber -Force -ErrorAction Stop
-            Import-Module $module
-          }
-          
           $publishParams = @{
             Path        = $modulePath
             NuGetApiKey = $env:apiKey
@@ -40,11 +37,9 @@ jobs:
             Repository  = $repository
             ErrorAction = 'Stop'
           }
-
           Write-Host "Files in module output:"
           Get-ChildItem $modulePath -Recurse -File | Select-Object -Expand FullName
-          Write-Host "Publishing to $repository"
-
+          Write-Host "`nPublishing to repository $repository"
           Publish-Module @publishParams
         env:
           apiKey: ${{ secrets.PSGALLERY_API_KEY }}
