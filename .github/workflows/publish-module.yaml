@@ -10,7 +10,7 @@ jobs:
   build-and-publish:
     runs-on: ubuntu-latest
     env:
-      modulePath: "./Get-GitHubAppToken"
+      modulePath: "${{ github.workspace }}/Get-GitHubAppToken"
 
     steps:
       - name: Checkout repository
@@ -19,6 +19,7 @@ jobs:
       - name: Install and Update necessary modules
         shell: pwsh
         run: |
+          echo "$env:modulePath"
           $requiredModules = (Import-PowerShellDataFile "$env:modulepath/Get-GitHubAppToken.psd1").RequiredModules + "PowerShellGet"
           foreach ($module in $requiredModules) {
             Write-Host "Installing module $module"
