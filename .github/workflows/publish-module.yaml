@@ -21,8 +21,17 @@ jobs:
       - name: Build and Publish Module
         shell: pwsh
         run: |
-          $modulePath = ".\Get-GitHubAppToken"
+          $modulePath = "./Get-GitHubAppToken"
           $repository = "PSGallery"
+
+          #Installing required modules in order for Test-ModuleManifest to complete
+          $requiredModules = (Import-PowerShellDataFile "$modulepath/Get-GitHubAppToken.psd1).RequiredModules
+          foreach ($module in $requiredModules) {
+            Write-Host "Installing $module"
+            Install-Module $module -AllowClobber -Force -ErrorAction Stop
+            Import-Module $module
+          }
+          
           $publishParams = @{
             Path        = $modulePath
             NuGetApiKey = $env:apiKey
